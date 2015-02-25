@@ -1,0 +1,45 @@
+	.data
+val1:	1983
+val2:	2007
+
+	.text
+
+li $t1, -100 #addiu
+li $t2, 20
+li $t3, 40
+
+add $t1, $t1, $t1
+li $s1, 1
+li $s2, 3
+
+ONE:
+	add $s0, $s0, $s1
+	slt $t1, $s1, $t2
+	beq $s0, $s2 TWO
+	addi $t1, $t1, 10
+	bne $s0, $s2, ONE
+TWO:
+	jal THREE
+	xor $t1, $t2, $t3
+	j FOUR
+	
+THREE:
+	xori $t1, $t2, 5
+	jr $ra
+FOUR:
+	nor $t2, $t1, $t2
+	or $t1, $t2, $t3
+	and $s1, $s1, $s1
+	li $s6, 16
+	sw $s4, val1
+	lw $s5, val2
+	addu $t2, $t1, $t1
+	addi $t1, $t3, -3
+	lui $t2, 4
+	ori $s0, $t1, 20
+	sltu $t1, $t2, $t3
+	andi $t2, $t1, 43
+	slti $t3, $t3, 4
+	sltiu $t3, $t3, 5
+	sub $t1, $t2, $t3
+	subu $t2, $t3, $t1

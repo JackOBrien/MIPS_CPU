@@ -1,0 +1,83 @@
+############################################################################
+#
+# Author:  Cyril Casapao
+#
+# A small test including all Phase 1 instructions. This one mainly
+# focuses on memory access and branching.
+#
+# Good luck!
+###########################################################################
+	
+.data
+firstHex:    65535
+secondHex:   0
+	
+# Random values to be used later on
+val0:      1
+val1:      101
+val2:      1048576
+val3:      103
+val4:      0
+
+.text
+
+# Here comes the fun stuff
+begin:
+lw $21, firstHex	# $21 = 0x0000FFFF
+lui $22, 0xFFFF		# $22 = 0xFFFF0000
+ori $23, $22, 0xFFFF	# $23 = 0xFFFFFFFF = 0xFFFF0000 | 0x0000FFFF 
+
+addi $20, $0, 0	        # Set $20 to zero
+add $20, $20, $21	# Add 65,535 to $20 
+
+sw $21, val0
+sw $21, secondHex	# secondHex should now also be 65,535
+add $21, $0, $0		# $21 = 0
+lw $21, secondHex	# $21 = 65,535
+
+beq $20, $0, begin	# if $20 is zero, go to top; this should NOT happen
+
+beq $20, 131070, end	# if $20 is 65,535 * 2, go to end; this should NOT happen, if it does, we previously jumped to top 
+	
+addi $8, $0, -65435	# $8 = -65,435
+lw $10, firstHex	# $10 = 65,535
+add $10, $10, $8	# $10 = 200
+beq $10, $21, end	# if $10 = 65,535 go to end; this should NOT happen
+
+beq $20, $21, initialize	# if $20 = $21 (65,535) then go to initialize
+
+# This should only be reached after the values have been initialized
+afterInit:
+lui $11, 0x1001
+ori $12, 0x0110
+sw $11, 8($17)
+sw $12, 0($18)
+
+j end
+
+# NONE OF THIS CODE SHOULD BE REACHED
+add $20, $0, $0
+ori $21, $0, 0
+addi $22, $22, -102
+addi $23, $0, -65535
+
+j end			
+
+# This code should execute
+initialize:
+sw $10, val0		# $10 = 100; index0 is now 100
+add $15, $10, $10	# $15 = 200
+sw $15, val4
+
+# Load addresses into $17 and $19
+la $17, val0		
+la $18, val4
+
+# Load val4 (val4 = 200) using offsets
+lw $11, 16($17)	
+lw $12, 0($18)	
+
+beq $11, $12 afterInit
+
+end:
+# Nothing to see here

@@ -1,0 +1,37 @@
+############################################################################
+#
+# #REKT
+# An incomplete test by Kyle Niewiada and Eric VanKlompenberg
+# Blame Kyle.
+#
+###########################################################################
+
+.data
+
+.text
+
+    lui $8, 32767 #(2^15)-1
+    lui $10, 32767 # (2^15)-1
+    lui $12, 0
+    lui $13, 1
+
+    beq $8, $10, four
+    one:
+    beq $8, $9, done
+    lui $16, 1
+    two:
+    beq $9, $11, six
+    three:
+    beq $9, $9, seven
+    lui $17, 1
+    four:
+    beq $12, $13, one
+    five:
+    beq $13, $14, six
+    lui $18, 1
+    six:
+    beq $8, $8, three
+    seven:
+    beq $9, $10, done
+    lui $19, 1
+    done:
