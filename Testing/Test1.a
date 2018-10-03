@@ -43,3 +43,10 @@ FOUR:
 	sltiu $t3, $t3, 5
 	sub $t1, $t2, $t3
 	subu $t2, $t3, $t1
+FIVE:
+	li $s6, 16
+	sw $s4, val1
+	lw $s5, val2
+	beq $s0, $s2 TWO
+	addi $t1, $t1, 10
+	bne $s0, $s2, ONE
